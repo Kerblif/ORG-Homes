@@ -3,7 +3,8 @@ import * as THREE from 'three';
 import { MapControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
-let camera, controls, scene, renderer;
+let camera, controls, scene, renderer, raycaster, pointer;
+let intersectObjects;
 
 init();
 animate();
@@ -43,13 +44,17 @@ function init() {
   // world
   const loader = new GLTFLoader();
 
+  raycaster = new THREE.Raycaster();
+
+  intersectObjects = []
+
   loader.load('./src/bin/models/khrushchevka/scene.gltf', function (gltf) {
 
     const model = gltf.scene;
     model.position.set(0, 0, 0);
     model.scale.set(1, 1, 1);
     scene.add(model);
-
+    intersectObjects.push(model)
   }, undefined, function (e) {
 
     console.error(e);
@@ -62,7 +67,7 @@ function init() {
     model.position.set(300, 0, 0);
     model.scale.set(1, 1, 1);
     scene.add(model);
-
+    intersectObjects.push(model)
   }, undefined, function (e) {
 
     console.error(e);
@@ -75,7 +80,7 @@ function init() {
     model.position.set(300, 0, 100);
     model.scale.set(1, 1, 1);
     scene.add(model);
-
+    intersectObjects.push(model)
   }, undefined, function (e) {
 
     console.error(e);
@@ -88,7 +93,7 @@ function init() {
     model.position.set(-300, 0, 0);
     model.scale.set(4, 4, 4);
     scene.add(model);
-
+    intersectObjects.push(model)
   }, undefined, function (e) {
 
     console.error(e);
@@ -101,7 +106,7 @@ function init() {
     model.position.set(400, 0, 0);
     model.scale.set(10, 10, 10);
     scene.add(model);
-
+    intersectObjects.push(model)
   }, undefined, function (e) {
 
     console.error(e);
@@ -124,6 +129,9 @@ function init() {
   // resize listener
 
   window.addEventListener('resize', onWindowResize);
+
+  pointer = new THREE.Vector2();
+  document.addEventListener('mousemove', onPointerMove);
 }
 
 function onWindowResize() {
@@ -131,6 +139,13 @@ function onWindowResize() {
   camera.updateProjectionMatrix();
 
   renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function onPointerMove(event) {
+
+  pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+  pointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
 }
 
 function animate() {
@@ -142,5 +157,10 @@ function animate() {
 }
 
 function render() {
+  raycaster.setFromCamera(pointer, camera);
+  var intersects = raycaster.intersectObjects(intersectObjects, false);
+
+  console.log(intersects)
+
   renderer.render(scene, camera);
 }
