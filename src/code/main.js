@@ -46,8 +46,60 @@ function init() {
   loader.load('./src/bin/models/khrushchevka/scene.gltf', function (gltf) {
 
     const model = gltf.scene;
-    model.position.set(1, 1, 0);
+    model.position.set(0, 0, 0);
     model.scale.set(1, 1, 1);
+    scene.add(model);
+
+  }, undefined, function (e) {
+
+    console.error(e);
+
+  });
+
+  loader.load('./src/bin/models/brejnevka/brejnevka.glb', function (gltf) {
+
+    const model = gltf.scene;
+    model.position.set(300, 0, 0);
+    model.scale.set(1, 1, 1);
+    scene.add(model);
+
+  }, undefined, function (e) {
+
+    console.error(e);
+
+  });
+
+  loader.load('./src/bin/models/brejnevka-2/brejnevka.glb', function (gltf) {
+
+    const model = gltf.scene;
+    model.position.set(300, 0, 100);
+    model.scale.set(1, 1, 1);
+    scene.add(model);
+
+  }, undefined, function (e) {
+
+    console.error(e);
+
+  });
+
+  loader.load('./src/bin/models/panel-house/panel.glb', function (gltf) {
+
+    const model = gltf.scene;
+    model.position.set(-300, 0, 0);
+    model.scale.set(4, 4, 4);
+    scene.add(model);
+
+  }, undefined, function (e) {
+
+    console.error(e);
+
+  });
+
+  loader.load('./src/bin/models/soviet-house/soviet.glb', function (gltf) {
+
+    const model = gltf.scene;
+    model.position.set(400, 0, 0);
+    model.scale.set(10, 10, 10);
     scene.add(model);
 
   }, undefined, function (e) {
