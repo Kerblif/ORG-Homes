@@ -1,0 +1,45 @@
+{
+  "name": "orghomes",
+  "version": "0.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "start": "webpack-dev-server",
+    "b": "webpack --config webpack.config.js",
+    "s": "webpack-dev-server",
+    "autocommit": "git add . && git commit -m \"<comment here>\" && git push -u <your branch> master"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kerblif/ORG-Homes.git"
+  },
+  "author": "EH5, DV1, DA2, AS1",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kerblif/ORG-Homes/issues"
+  },
+  "homepage": "https://github.com/Kerblif/ORG-Homes",
+  "dependencies": {
+    "@babel/core": "^7.23.0",
+    "@babel/plugin-proposal-class-properties": "^7.10.1",
+    "@babel/plugin-transform-arrow-functions": "^7.10.1",
+    "@babel/plugin-transform-runtime": "^7.10.1",
+    "@babel/preset-env": "^7.10.2",
+    "babel": "^6.23.0",
+    "babel-loader": "^8.1.0",
+    "chokidar": "^3.5.3",
+    "css-loader": "^3.5.3",
+    "file-loader": "^6.0.0",
+    "html-loader": "^1.1.0",
+    "html-webpack-plugin": "^4.3.0",
+    "matter-js": "^0.14.2",
+    "mini-css-extract-plugin": "^0.9.0",
+    "raw-loader": "^4.0.1",
+    "three": "^0.117.1",
+    "uuid": "^9.0.1",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.11.0"
+  }
+}
