@@ -2,7 +2,77 @@
 
 <head>
     <title>Kerblif's pain</title>
+    <style>
+        @font-face {
+            font-family: HSE-Sans;
+            src: url("/src/bin/fonts/hse-sans/HSESans-Regular.otf") format("opentype");
+        }
+
+        #title {
+            width: 30%;
+            top: 10px;
+            left: 10px;
+            text-align: left;
+            font-size: x-large;
+            background-color: white;
+        }
+
+        #info-btn {
+            width: 30%;
+            top: 50px;
+            height: 50px;
+            left: 10px;
+            text-align: left;
+            font-size: large;
+            background-color: white;
+        }
+
+        #info-text {
+            display: none;
+            width: 30%;
+            top: 100px;
+            left: 10px;
+            text-align: left;
+            font-size: large;
+            background-color: white;
+        }
+
+        #coords {
+            width: 30%;
+            bottom: 10px;
+            right: 10px;
+            text-align: right;
+            font-size: large;
+        }
+
+        #docs {
+            width: 30%;
+            bottom: 10px;
+            left: 10px;
+            text-align: left;
+            font-size: large;
+        }
+
+        button,
+        div {
+            width: 30%;
+            position: absolute;
+            z-index: 100;
+            display: block;
+            font-family: HSE-Sans;
+        }
+    </style>
 </head>
+
+<div id="title">HSE forever!!</div>
+<div id="info-text">HSE forever!!</div>
+
+<button id="info-btn">
+    Показать информацию о здании
+</button>
+
+<div id="coords">HSE forever!!</div>
+<div id="docs"><a href="/src/bin/docs/ТиповаяЗастройка.pdf">Скачать текст о типокой застройке</a></div>
 
 <body style="margin: 0">
 
