@@ -1,14 +1,106 @@
 import * as THREE from 'three';
 
 import { MapControls } from 'three/examples/jsm/controls/OrbitControls';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { TextGeometry } from 'three/src/geometries/TextGeometry';
+import { FontLoader } from 'three/src/loaders/FontLoader';
 
-let camera, controls, scene, renderer, raycaster, pointer;
-let intersectObjects;
+let camera, controls, scene, renderer, pointer;
 
 var info_btn = document.getElementsByTagName("button")[0];
 var info_text = document.getElementById("info-text");
 info_text.hidden = true;
+
+var pos = 0
+var globalScale = 3
+
+var font = null;
+
+var models = {
+  "1-464": {
+    height: 12.5,
+    name: "1-464"
+  },
+  "1-515": {
+    height: 13.2,
+    name: "1-515"
+  },
+  "111-83": {
+    height: 23.85,
+    name: "111-83"
+  },
+  "II\ 68-03": {
+    height: 29.76,
+    name: "II-68-03"
+  },
+  "II-18": {
+    height: 30.0,
+    name: "II-18"
+  },
+  "II-57": {
+    height: 31.68,
+    name: "II-57"
+  },
+  "II-68-04": {
+    height: 29.76,
+    name: "II-68-04"
+  },
+  "KOPE-80": {
+    height: 58.52,
+    name: "КОПЭ-80"
+  }
+}
+
+function gltfLoad (gltf) {
+  const model = gltf.scene;
+  let modelName = gltf.parser.options.path.split('/').slice(-2)[0]
+
+  let bbox = new THREE.Box3().setFromObject(model);
+  let size = bbox.getSize(new THREE.Vector3());
+  let scale = models[modelName]["scale"] = models[modelName]["height"] / size.y * globalScale
+  models[modelName]["pos"] = pos + size.x * scale / 2;
+
+  let textGeom = new TextGeometry( models[modelName]["name"], {
+      font: font,
+      size: 10,
+      height: 5
+    } );
+    const textMaterial = new THREE.MeshFaceMaterial([
+      new THREE.MeshPhongMaterial({
+        color: 0xff22cc,
+        flatShading: true,
+      }), // front
+      new THREE.MeshPhongMaterial({
+        color: 0xffcc22
+      }), // side
+  ])
+  const textMesh = new THREE.Mesh(textGeom, textMaterial)
+
+  let textBbox = new THREE.Box3().setFromObject(textMesh);
+  let textSize = textBbox.getSize(new THREE.Vector3());
+
+  textMesh.rotateY(Math.PI)
+  textMesh.rotateX(-Math.PI / 2)
+
+  textMesh.position.set(models[modelName]["pos"] + textSize.x / 2, 0, -80);
+  model.position.set(models[modelName]["pos"], 0, 0);
+
+  pos += 100 + size.x * scale
+
+  model.scale.set(scale, scale, scale);
+
+  model.rotateY(Math.PI)
+  scene.add(model);
+  scene.add(textMesh);
+
+  console.log("%s spawned at %f", modelName, models[modelName]["pos"])
+}
+
+function errorCatcher(e) {
+
+  console.error(e);
+
+}
 
 info_btn.addEventListener("click", infoButtonClick, false);
 
@@ -47,52 +139,40 @@ function init() {
 
   controls.maxPolarAngle = Math.PI / 2;
 
+  const fontLoader = new FontLoader();
+
+  fontLoader.load(
+    // resource URL
+    '/src/bin/fonts/hse-sans/HSESans.json',
+  
+    // onLoad callback
+    function ( f ) {
+      // do something with the font
+      font = f
+    },
+  
+    // onProgress callback
+    function ( xhr ) {
+      console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+    },
+  
+    // onError callback
+    function ( err ) {
+      console.log( 'An error happened' );
+    }
+  );
+
   // world
   const loader = new GLTFLoader();
 
-  raycaster = new THREE.Raycaster();
-
-  intersectObjects = []
-
-  loader.load('./src/bin/models/khrushchevka/scene.gltf', function (gltf) {
-
-    const model = gltf.scene;
-    model.position.set(0, 0, 0);
-    model.scale.set(2, 2, 2);
-    model.rotateY(Math.PI)
-    scene.add(model);
-    intersectObjects.push(model)
-  }, undefined, function (e) {
-
-    console.error(e);
-
-  });
-
-  loader.load('./src/bin/models/brejnevka/brejnevka.glb', function (gltf) {
-
-    const model = gltf.scene;
-    model.position.set(400, 0, 0);
-    model.scale.set(3, 3, 3);
-    scene.add(model);
-    intersectObjects.push(model)
-  }, undefined, function (e) {
-
-    console.error(e);
-
-  });
-
-  loader.load('./src/bin/models/panel80/panel80.glb', function (gltf) {
-
-    const model = gltf.scene;
-    model.position.set(-400, 0, 0);
-    model.scale.set(3, 3, 3);
-    scene.add(model);
-    intersectObjects.push(model)
-  }, undefined, function (e) {
-
-    console.error(e);
-
-  });
+  loader.load('./src/bin/models/1-464/model.gltf', gltfLoad, undefined, errorCatcher);
+  loader.load('./src/bin/models/1-515/model.gltf', gltfLoad, undefined, errorCatcher);
+  loader.load('./src/bin/models/111-83/model.glb', gltfLoad, undefined, errorCatcher);
+  loader.load('./src/bin/models/II\ 68-03/model.gltf', gltfLoad, undefined, errorCatcher);
+  loader.load('./src/bin/models/II-18/model.gltf', gltfLoad, undefined, errorCatcher);
+  loader.load('./src/bin/models/II-57/model.gltf', gltfLoad, undefined, errorCatcher);
+  loader.load('./src/bin/models/II-68-04/model.glb', gltfLoad, undefined, errorCatcher);
+  loader.load('./src/bin/models/KOPE-80/model.gltf', gltfLoad, undefined, errorCatcher);
 
   // lights
 
